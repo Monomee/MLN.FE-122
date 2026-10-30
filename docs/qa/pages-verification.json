@@ -2,7 +2,7 @@
   "verifiedAt": "2026-10-30T12:46:06.339Z",
   "targetRepository": "https://github.com/Monomee/MLN.FE-122",
   "targetUrl": "https://monomee.github.io/MLN.FE-122/",
-  "targetUrlStatus": "deployment not yet verified; check GitHub Actions",
+  "targetUrlStatus": "GitHub Pages deployment successful",
   "base": "/MLN.FE-122/",
   "routing": "HashRouter",
   "stats": {
@@ -13,7 +13,7 @@
     "unexpected": 0,
     "flaky": 0
   },
-  "pushStatus": "GitHub API write confirmed; publishing source after bootstrap commit 537ff0bef422310245a4761619ea6b2da8cb123a",
+  "pushStatus": "Published via GitHub API, all 67 source blob hashes verified",
   "scope": "Local production build, Chromium desktop and mobile emulation; not a live GitHub deployment",
   "defaultBuildRegression": {
     "startTime": "2026-10-30T12:46:16.647Z",
@@ -34,5 +34,18 @@
   },
   "gitignoreChecks": "PASS: node_modules, dist, test-results, cache, .env and personal backup ignored",
   "githubAccount": "Monomee",
-  "githubInstallation": 176893954
+  "githubInstallation": 176893954,
+  "sourceCommit": "388eb8da002a42815724a991010c0ab4ca3e2a76",
+  "workflowRunId": 41061378012,
+  "workflowRunUrl": "https://github.com/Monomee/MLN.FE-122/actions/runs/41061378012",
+  "ci": {
+    "os": "ubuntu-latest",
+    "domainPassed": 22,
+    "unitPassed": 30,
+    "rootE2ePassed": 36,
+    "pagesE2ePassed": 6,
+    "build": "success",
+    "deploy": "success"
+  },
+  "liveBrowserVerification": "Runs in verify-live CI job; local sandbox returned ERR_NETWORK_ACCESS_DENIED"
 }

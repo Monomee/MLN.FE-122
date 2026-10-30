@@ -27,7 +27,7 @@ test('Pages supports deep links, correct asset paths, reload and private browser
   const isolated = await browser.newContext();
   try {
     const other = await isolated.newPage();
-    await other.goto('http://127.0.0.1:5173/MLN.FE-122/#/practice');
+    await other.goto(new URL('#/practice', page.url()).href);
     await expect(other.getByRole('heading', { name: 'Chưa có buổi học đang mở' })).toBeVisible();
   } finally { await isolated.close(); }
 });

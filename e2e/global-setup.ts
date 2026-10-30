@@ -1,6 +1,7 @@
 import { preview } from 'vite';
 
 export default async function setup() {
+  if (process.env.PLAYWRIGHT_BASE_URL) return;
   // Close the HTTP server directly; Windows sandboxes can block process-tree teardown.
   const server = await preview({
     configLoader: 'runner',

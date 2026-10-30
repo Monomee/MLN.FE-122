@@ -5,6 +5,6 @@ export default defineConfig({
   testMatch: pages ? '**/pages.spec.ts' : ['**/study.spec.ts', '**/verification.spec.ts'],
   globalSetup: './e2e/global-setup.ts',
   reporter: [['list'], ['json', { outputFile: 'test-results/results.json' }]],
-  use: { baseURL: pages ? 'http://127.0.0.1:5173/MLN.FE-122/' : 'http://127.0.0.1:5173', trace: 'retain-on-failure' },
+  use: { baseURL: process.env.PLAYWRIGHT_BASE_URL || (pages ? 'http://127.0.0.1:5173/MLN.FE-122/' : 'http://127.0.0.1:5173'), trace: 'retain-on-failure' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }, { name: 'mobile', use: { ...devices['Pixel 7'] } }],
 });

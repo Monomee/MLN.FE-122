@@ -81,7 +81,7 @@ IndexedDB v1 lưu snapshot ứng dụng trong `documents`; v2 thêm revision b�
 
 ## Deploy static
 
-GitHub Pages cho repository **Monomee/MLN.FE-122** đã có workflow build/test/deploy và chế độ HashRouter riêng. Xem [hướng dẫn GitHub Pages và trạng thái push/deploy](docs/github-pages.md). Cần bật Settings → Pages → GitHub Actions; website chưa được xác nhận online từ phiên làm việc này.
+GitHub Pages cho repository **Monomee/MLN.FE-122** đã được publish tại **https://monomee.github.io/MLN.FE-122/**. Workflow build/test/deploy dùng HashRouter và kiểm tra lại website công khai sau mỗi lần deploy. Xem [hướng dẫn GitHub Pages và trạng thái triển khai](docs/github-pages.md).
 
 Sau khi tests và build thành công:
 

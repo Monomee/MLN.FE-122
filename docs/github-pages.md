@@ -2,12 +2,12 @@
 
 Repository đích: https://github.com/Monomee/MLN.FE-122
 
-URL dự kiến sau khi deploy thành công: https://monomee.github.io/MLN.FE-122/ — **chưa xác minh website này đang online**.
+Website: **https://monomee.github.io/MLN.FE-122/**. GitHub xác nhận deploy thành công ở [lượt triển khai đầu tiên](https://github.com/Monomee/MLN.FE-122/actions/runs/41061378012), source commit `388eb8da002a42815724a991010c0ab4ca3e2a76`.
 
 ## Cấu hình đã chuẩn bị
 
 - `.gitignore` bỏ qua node_modules, dist, test-results/browser profiles, cache, logs, .env và các file backup `mln-backup-*.json`.
-- `.github/workflows/pages.yml` chạy khi push main hoặc chọn Run workflow. Node 24, npm ci từ lockfile, TypeScript, domain/unit/UI, Chromium E2E bản root và bản Pages. Chỉ build đã qua kiểm thử mới được upload từ dist rồi deploy bằng GitHub Pages.
+- `.github/workflows/pages.yml` chạy khi push main hoặc chọn Run workflow. Node 24, npm ci từ lockfile, TypeScript, domain/unit/UI, Chromium E2E bản root và bản Pages. Chỉ build đã qua kiểm thử mới được upload từ dist rồi deploy bằng GitHub Pages. Job verify-live sau deploy chạy lại 6 ca Pages trực tiếp trên URL công khai.
 - `VITE_GITHUB_PAGES=true` đặt Vite base thành `/MLN.FE-122/` và dùng HashRouter. Ví dụ link học: `/MLN.FE-122/#/practice`. Reload/link trực tiếp không cần server rewrite.
 - Build mặc định vẫn dùng base `/` và BrowserRouter, phù hợp cấu hình Vercel/Netlify/Cloudflare cũ. Không cần dependency mới.
 - GitHub token của workflow chỉ có contents:read khi build, pages:write/id-token:write khi deploy; không cần PAT trong source hoặc secrets mới.
@@ -18,9 +18,9 @@ Các action references được ghim theo [hướng dẫn chính thức của Vi
 
 Source đã được chuẩn bị và kiểm thử tại workspace. Git CLI trong sandbox không kết nối được github.com:443 và không ghi được .git/config. Đã chuyển sang plugin GitHub: tài khoản Monomee được xác nhận có quyền với repository public, nhánh mặc định main. Sau khi cài GitHub App cho đúng chủ sở hữu Monomee, lần tạo .gitignore thành công tại commit `537ff0bef422310245a4761619ea6b2da8cb123a`.
 
-Phần còn lại được publish qua GitHub API với commit nối tiếp lịch sử main, không force push. Theo dõi [workflow Pages](https://github.com/Monomee/MLN.FE-122/actions/workflows/pages.yml) để xem kết quả CI/deploy mới nhất. Chỉ khi job deploy xanh và website đã được kiểm tra mới coi URL phía trên là live.
+Đã publish đủ 67 file qua GitHub API, kiểm tra mọi blob SHA trùng source local, commit nối tiếp lịch sử main và không force push. Lượt CI đầu tiên PASS 22 domain checks, 30 unit/UI, 36 E2E root và 6 E2E Pages; cả build và deploy đều thành công. Theo dõi [workflow Pages](https://github.com/Monomee/MLN.FE-122/actions/workflows/pages.yml) để xem kết quả mới nhất.
 
-GitHub Pages cần bật Source: GitHub Actions trong Settings của repository. Plugin hiện không có API đổi cài đặt Pages; không tạo hoặc yêu cầu PAT để lách giới hạn này.
+Chủ repository đã bật Source: GitHub Actions trong Settings. Trình duyệt tại sandbox không truy cập được internet công khai (ERR_NETWORK_ACCESS_DENIED), nên kiểm tra live được thực hiện từ runner GitHub. PLAYWRIGHT_BASE_URL đặt URL công khai và bỏ qua preview local; các kiểm tra nghiệp vụ giữ nguyên.
 
 ## Publish từ terminal trên máy của bạn
 
