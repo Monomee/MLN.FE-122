@@ -1,0 +1,28 @@
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, Check, Keyboard, RotateCcw } from 'lucide-react';
+import { useStudyStore } from '../../store/useStudyStore';
+import { activeQuestionId } from '../../domain/learning';
+import { QuestionCard } from '../../components/QuestionCard';
+import { Empty, Modal, Notice, PageHeading, ProgressBar, useAction } from '../../components/common';
+import { useQuizKeyboard } from '../../hooks/useQuizKeyboard';
+const labels={sequential:'Học tuần tự',random:'Học ngẫu nhiên',wrong:'Ôn câu sai',spaced:'Ôn theo ngày',starred:'Ôn câu đánh dấu'};
+export default function Practice() {
+  const store=useStudyStore();const {data}=store;const s=data.practices[data.activePracticeId??''];
+  const q=s?data.questions.find(q=>q.id===activeQuestionId(s)):undefined;
+  const {error,run}=useAction();
+  const checked=!!s&&(s.reviewId?s.reviewChecked:!!s.checked[q?.id??'']);
+  useEffect(()=>{if(!s||!checked||!data.settings.autoAdvance||s.blockPending||s.finished)return;const timer=setTimeout(()=>run(()=>store.practiceNext()),1400);return()=>clearTimeout(timer);},[s?.id,s?.position,s?.reviewId,checked,data.settings.autoAdvance,s?.blockPending,s?.finished]);
+  useQuizKeyboard(q?(s?.optionOrder[q.id]??[]):[],key=>run(()=>store.practiceSelect(key)),()=>run(()=>checked?store.practiceNext():store.practiceCheck()),!!s&&!s.finished&&!s.blockPending);
+  if(!s)return <><PageHeading title="Luyện tập" description="Bắt đầu một buổi học từ môn bạn muốn ôn."/><Empty title="Chưa có buổi học đang mở"><Link className="button" to="/subjects">Chọn môn học</Link></Empty></>;
+  if(s.finished)return <><PageHeading title="Bạn đã hoàn thành buổi học!" description="Mỗi câu hỏi là một bước tiến. Hãy giữ nhịp học của bạn."/><section className="card completion"><Check size={48}/><h2>Đã hoàn thành {s.questionIds.length} câu</h2><p>{s.wrongIds.length} câu từng trả lời sai trong phiên. Bạn có thể ôn lại bất cứ lúc nào.</p><div className="actions">{s.returnToSessionId&&<button className="button" onClick={()=>run(()=>store.change(d=>{d.activePracticeId=s.returnToSessionId;}))}>Tiếp tục nhóm học kế tiếp <ArrowRight size={16}/></button>}<Link className="button secondary" to="/review">Ôn lại câu sai</Link><Link className="button secondary" to="/subjects">Chọn buổi học mới</Link></div></section></>;
+  if(!q)return <Notice>Không tìm thấy câu hỏi. Hãy kiểm tra bộ dữ liệu.</Notice>;
+  const subject=data.subjects.find(subject=>subject.id===s.subjectId);
+  const selected=s.reviewId?s.reviewSelected:s.selections[q.id]??[];
+  const progress=Math.min(s.position+1,s.questionIds.length)/s.questionIds.length*100;
+  const blockStart=Math.max(0,s.position+1-s.groupSize);
+  const blockWrong=s.questionIds.slice(blockStart,s.position+1).filter(id=>s.wrongIds.includes(id));
+  return <><PageHeading eyebrow={subject?.name} title={s.reviewId?'Ôn lại để nhớ lâu hơn':labels[s.mode]} description={`Câu ${Math.min(s.position+1,s.questionIds.length)}/${s.questionIds.length} · Nhóm ${s.groupSize} câu`} action={<Link className="button secondary" to="/subjects">Đổi môn học</Link>}/><div className="practice-layout"><div><div className="practice-progress"><ProgressBar value={progress} label="Tiến trình phiên học"/><span>{Math.round(progress)}%</span></div>{s.reviewId&&<div className="review-banner"><RotateCcw size={19}/>Một câu đến lịch ôn · Hoàn thành để quay lại câu đang học.</div>}{error&&<Notice>{error}</Notice>}<QuestionCard question={q} selected={selected} checked={checked} order={s.optionOrder[q.id]} starred={!!data.progress[q.id]?.starred} onStar={()=>run(()=>store.star(q.id))} onSelect={key=>run(()=>store.practiceSelect(key))}/><div className="practice-controls"><button className="button secondary" disabled={s.position===0||!!s.reviewId} onClick={()=>run(()=>store.practicePrevious())}><ArrowLeft size={17}/>Câu trước</button>{checked?<button className="button" onClick={()=>run(()=>store.practiceNext())}>Tiếp tục <ArrowRight size={18}/></button>:<button className="button" disabled={!selected.length} onClick={()=>run(()=>store.practiceCheck())}><Check size={18}/>Kiểm tra đáp án</button>}</div><p className="keyboard-hint"><Keyboard size={16}/>Phím 1–9 hoặc chữ chọn đáp án · Enter kiểm tra / tiếp tục</p></div><aside><section className="card session-info"><h3>Buổi học của bạn</h3><div><span>Đã kiểm tra</span><strong>{Object.values(s.checked).filter(Boolean).length}/{s.questionIds.length}</strong></div><div><span>Câu từng sai</span><strong>{s.wrongIds.length}</strong></div><div><span>Chờ ôn trong phiên</span><strong>{s.queue.length}</strong></div><hr/><p className="muted small">Câu sai sẽ xuất hiện lại sau {data.settings.reviewGap} câu khác. Những câu còn lại được ôn ở cuối phiên.</p><p className="muted small">Tiến trình, lựa chọn và thứ tự được lưu tự động.</p></section><div className="focus-note"><span>✦</span><p>Chậm một chút cũng được.<br/><strong>Hiểu rõ mới là điều quan trọng.</strong></p></div></aside></div>
+    {s.blockPending&&<Modal title={`Hoàn thành nhóm ${s.groupSize} câu`} onClose={()=>run(()=>store.practiceBlock('continue'))}><p>Bạn vừa hoàn thành câu {blockStart+1}–{s.position+1}. Chọn bước tiếp theo.</p><div className="stack"><button className="button" onClick={()=>run(()=>store.practiceBlock('continue'))}>Tiếp tục nhóm kế tiếp</button><button className="button secondary" disabled={!blockWrong.length} onClick={()=>run(()=>store.practiceBlock('wrong'))}>Ôn {blockWrong.length} câu sai trong nhóm</button><button className="button secondary" onClick={()=>run(()=>store.practiceBlock('repeat'))}>Học lại toàn bộ nhóm</button></div></Modal>}
+  </>;
+}

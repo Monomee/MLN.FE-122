@@ -1,0 +1,35 @@
+{
+  "verifiedAt": "2026-10-30T08:39:03.359Z",
+  "node": "v24.15.0",
+  "typescript": "5.9.3",
+  "productionBuild": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "output": "dist",
+    "warning": "Entry chunk approximately 603 kB / 159 kB gzip"
+  },
+  "unit": {
+    "passed": 30,
+    "failed": 0,
+    "skipped": 0
+  },
+  "e2e": {
+    "startTime": "2026-10-30T08:35:34.198Z",
+    "duration": 89001.63799999999,
+    "expected": 36,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "domain": {
+    "passed": 22,
+    "failed": 0
+  },
+  "questionSourceSha256": "5cc9066db0d529086f2890e639adb6580240eec1c215ed72b5f4ec4b4d069f60",
+  "limits": [
+    "Dev optimizer blocked by sandbox filesystem permissions",
+    "Browser install cache lock EPERM; E2E used existing Chromium v1248",
+    "Chromium desktop/mobile emulation; no physical device, Firefox or Safari checks",
+    "Hosting origin not deployed"
+  ]
+}

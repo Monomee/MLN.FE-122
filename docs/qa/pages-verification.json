@@ -1,0 +1,38 @@
+{
+  "verifiedAt": "2026-10-30T12:46:06.339Z",
+  "targetRepository": "https://github.com/Monomee/MLN.FE-122",
+  "targetUrl": "https://monomee.github.io/MLN.FE-122/",
+  "targetUrlStatus": "deployment not yet verified; check GitHub Actions",
+  "base": "/MLN.FE-122/",
+  "routing": "HashRouter",
+  "stats": {
+    "startTime": "2026-10-30T12:44:01.499Z",
+    "duration": 13484.926000000001,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "pushStatus": "GitHub API write confirmed; publishing source after bootstrap commit 537ff0bef422310245a4761619ea6b2da8cb123a",
+  "scope": "Local production build, Chromium desktop and mobile emulation; not a live GitHub deployment",
+  "defaultBuildRegression": {
+    "startTime": "2026-10-30T12:46:16.647Z",
+    "duration": 89777.258,
+    "expected": 36,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "typecheck": "PASS",
+  "unit": {
+    "passed": 30,
+    "failed": 0
+  },
+  "domain": {
+    "passed": 22,
+    "failed": 0
+  },
+  "gitignoreChecks": "PASS: node_modules, dist, test-results, cache, .env and personal backup ignored",
+  "githubAccount": "Monomee",
+  "githubInstallation": 176893954
+}

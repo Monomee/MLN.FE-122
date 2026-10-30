@@ -1,0 +1,13 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CalendarDays, RotateCcw, Star } from 'lucide-react';
+import { practiceCandidates, useStudyStore } from '../../store/useStudyStore';
+import { Empty, Notice, PageHeading, useAction } from '../../components/common';
+import type { PracticeMode } from '../../domain/models';
+export default function Review() {
+  const data=useStudyStore(s=>s.data);const start=useStudyStore(s=>s.startPractice);const nav=useNavigate();
+  const [subject,setSubject]=useState(data.subjects[0]?.id??''),[filter,setFilter]=useState('wrong');const {error,run}=useAction();
+  const candidates=practiceCandidates(data,subject,filter);
+  const modes=[{id:'wrong',name:'Câu từng trả lời sai',text:'Ôn lại mọi câu bạn đã từng sai.',icon:RotateCcw},{id:'spaced',name:'Đến hạn hôm nay',text:'Lịch dài hạn, độc lập với hàng chờ trong phiên.',icon:CalendarDays},{id:'starred',name:'Câu đánh dấu sao',text:'Tập trung vào những câu bạn muốn nhớ.',icon:Star}];
+  return <><PageHeading title="Ôn tập thông minh" description="Gặp lại đúng kiến thức, vào đúng lúc cần nhớ."/>{error&&<Notice>{error}</Notice>}<label className="subject-select">Môn học<select value={subject} onChange={e=>setSubject(e.target.value)}>{data.subjects.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><div className="review-grid">{modes.map(m=><button key={m.id} className={`card review-mode ${filter===m.id?'active':''}`} onClick={()=>setFilter(m.id)}><m.icon size={25}/><strong>{m.name}</strong><span className="muted">{m.text}</span><b>{practiceCandidates(data,subject,m.id).length} câu</b></button>)}</div><section className="card form-card"><div className="section-title"><h2>{modes.find(m=>m.id===filter)?.name}</h2><button className="button" disabled={!candidates.length} onClick={()=>run(()=>{start(candidates.map(q=>q.id),filter as PracticeMode);nav('/practice');})}>Bắt đầu ôn tập</button></div>{!candidates.length?<Empty title="Không có câu nào trong nhóm này">Tiếp tục luyện tập để xây dựng lịch ôn của bạn.</Empty>:<div className="question-list">{candidates.map(q=><div className="question-row" key={q.id}><span className="tag">{q.number}</span><div><strong>{q.content}</strong><p className="muted small">{data.progress[q.id]?.wrong??0} lần sai · Mức ôn {data.progress[q.id]?.level??0}{data.progress[q.id]?.dueAt?` · Hẹn ôn ${new Date(data.progress[q.id].dueAt!).toLocaleDateString('vi-VN')}`:''}</p></div></div>)}</div>}</section><p className="muted small">Các mốc ôn hiện tại: {data.settings.intervals.join(' → ')} ngày. Có thể điều chỉnh trong Cài đặt.</p></>;
+}
