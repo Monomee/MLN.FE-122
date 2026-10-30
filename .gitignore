@@ -1,0 +1,14 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+*.tsbuildinfo
+*.local
+.npm-cache/
+.tooling/
+.env
+.env.*
+mln-backup-*.json
+*.log
+.DS_Store
+Thumbs.db
